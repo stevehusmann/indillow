@@ -4,6 +4,7 @@
     "body-parser": "^1.19.2",
     "cheerio": "^1.0.0-rc.10",
     "express": "^4.17.3",
-    "proxycrawl": "^2.4.0"
+    "proxycrawl": "^2.4.0",
+    "puppeteer": "^13.3.2"
   }
 }
