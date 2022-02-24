@@ -1,21 +1,24 @@
+require('dotenv').config();
 const router = require("express").Router();
 const axios = require('axios');
 const puppeteer = require('puppeteer');
+const {Client} = require("@googlemaps/google-maps-services-js");
 
 // const URL = 'https://www.indeed.com/jobs?q=cook&l=Round%20Rock,%20TX&radius=0&start=0';
 
 router.get("/jobs", async (req, res, next) => {
-  const query = req.query.q || ' ';
-  const location = req.query.l || ' ';
-  const radius = req.query.radius || 0;
-  // const query = 'Cook';
-  // const location = 'Round Rock';
-  // const radius = 0;
+  // const query = req.query.q || ' ';
+  // const location = req.query.l || ' ';
+  // const radius = req.query.radius || 0;
+  const query = 'Cook';
+  const location = 'Leander';
+  const radius = 0;
+
   let URL = `http://www.indeed.com/jobs?q=${query}&l=${location}&radius=${radius}`;
   const jobsArray = [];
   let pageCount = 1;
 
-  while (URL) {
+  while (URL && pageCount < 2) {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     await page.goto(URL);
@@ -24,7 +27,7 @@ router.get("/jobs", async (req, res, next) => {
       return window.mosaic.providerData["mosaic-provider-jobcards"].metaData.mosaicProviderJobCardsModel.results;
     })
     
-    resultsArray.map(job => {
+    resultsArray.map(async (job) => {
       if(job.loceTagValueList) {
         let address = '';
         let neighborhood = '';
@@ -44,11 +47,26 @@ router.get("/jobs", async (req, res, next) => {
           urgentlyHiring: job.urgentlyHiring,
           salary: job.salarySnippet.text,
           address: address,
-          neighborhood: neighborhood
+          neighborhood: neighborhood,
+          jobTypes: job.jobTypes
         })
-        
       }
-    })
+    });
+
+    const addLocationData = await Promise.all(jobsArray.map(async (job) => {
+      const args = {
+        params: {
+          key: process.env.GOOGLE_MAPS_API_KEY,
+          address: job.address,
+        }
+      };
+      const client = new Client();
+      const geocode = await client.geocode(args).then(gcResponse => {
+        return gcResponse.data.results[0];
+      });
+      job.location = geocode.geometry.location;
+      job.placeId = geocode.place_id;
+    }));
 
     const newURL = await page.evaluate(() => {
       return document.querySelector('a[aria-label="Next"]')?.getAttribute('href');
@@ -59,13 +77,14 @@ router.get("/jobs", async (req, res, next) => {
     } else {
       URL = null;
     }
-console.log(URL);
-pageCount++;
+    
+  console.log(URL);
+  pageCount++;
   }
 
   res.send(jobsArray);
 
-})
+});
 
 module.exports = router;
 
