@@ -1,24 +1,23 @@
 require('dotenv').config();
 const router = require("express").Router();
-const axios = require('axios');
 const puppeteer = require('puppeteer');
 const {Client} = require("@googlemaps/google-maps-services-js");
 
 // const URL = 'https://www.indeed.com/jobs?q=cook&l=Round%20Rock,%20TX&radius=0&start=0';
 
 router.get("/jobs", async (req, res, next) => {
-  // const query = req.query.q || ' ';
-  // const location = req.query.l || ' ';
-  // const radius = req.query.radius || 0;
-  const query = 'Cook';
-  const location = 'Leander';
-  const radius = 0;
+  const query = req.query.q || ' ';
+  const location = req.query.l || ' ';
+  const radius = req.query.radius || 0;
+  // const query = 'cook';
+  // const location = 'Round%20Rock';
+  // const radius = 0;
 
   let URL = `http://www.indeed.com/jobs?q=${query}&l=${location}&radius=${radius}`;
   const jobsArray = [];
   let pageCount = 1;
 
-  while (URL && pageCount < 2) {
+  while (URL && pageCount < 3) {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     await page.goto(URL);
@@ -31,7 +30,7 @@ router.get("/jobs", async (req, res, next) => {
       if(job.loceTagValueList) {
         let address = '';
         let neighborhood = '';
-        if(job.loceTagValueList.length == 1) {
+        if(job.loceTagValueList.length == 1 && job.company) {
           address = `${job.loceTagValueList[0].slice(54,-2)}, ${job.jobLocationCity}, ${job.jobLocationState} ${job.jobLocationPostal}`;
           neighborhood = null;
         } else if (job.loceTagValueList.length == 2) {
@@ -66,7 +65,7 @@ router.get("/jobs", async (req, res, next) => {
       });
       job.location = geocode.geometry.location;
       job.placeId = geocode.place_id;
-    }));
+    }))
 
     const newURL = await page.evaluate(() => {
       return document.querySelector('a[aria-label="Next"]')?.getAttribute('href');
@@ -80,10 +79,8 @@ router.get("/jobs", async (req, res, next) => {
     
   console.log(URL);
   pageCount++;
-  }
-
-  res.send(jobsArray);
-
+}
+res.send(jobsArray);
 });
 
 module.exports = router;
