@@ -12,15 +12,13 @@ const Header = () => {
       <Toolbar className={classes.toolbar}>
         <img src="indillow-logo.png" alt="logo" className={classes.logo} />
         <Box display="flex">
-        <Typography variant="h6" className={classes.title}>
-          find hourly jobs on a map
-        </Typography>
+
         {/* <Autocomplete> */}
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
-            <InputBase placeholder="Search..." classes={{ root: classes.inputRoot, input: classes.inputInput }}/>
+            <InputBase placeholder="Job title, keywords, or company" classes={{ root: classes.inputRoot, input: classes.inputInput }}/>
           </div>
         {/* </Autocomplete> */}
         </Box>

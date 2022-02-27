@@ -3,10 +3,10 @@ import React from 'react';
 const JobDetails = ({ job }) => {
   return (
     <>
-        <h1>{job.companyName}</h1>
-        <h2>{job.normalizedJobTitle}</h2>
-
-
+        <h2>{job.jobTitle}</h2>
+        <h4>{job.address}</h4>
+        <h4>{job.company}</h4>
+        <h4>{job.salary}</h4>
     </>
   );
 }
