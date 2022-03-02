@@ -16,10 +16,10 @@ router.get("/jobs", async (req, res, next) => {
   let URL = `http://www.indeed.com/jobs?q=${query}&l=${location}&radius=${radius}`;
   const jobsArray = [];
   let pageCount = 1;
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
 
-  while (URL && pageCount < 3) {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
+  while (URL && pageCount < 2) {
     await page.goto(URL);
   
     const resultsArray = await page.evaluate(() => {
@@ -76,10 +76,11 @@ router.get("/jobs", async (req, res, next) => {
     } else {
       URL = null;
     }
-    
+  
   console.log(URL);
   pageCount++;
 }
+await browser.close();
 res.send(jobsArray);
 });
 

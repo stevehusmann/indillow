@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FETCH_JOBS } from './types';
+import { FETCH_JOBS, SET_SEARCH_TERMS } from './types';
 const ROOT_URL = "http://localhost:8000";
 
 export const fetchJobs = (query, location, radius) => dispatch => {
@@ -10,4 +10,8 @@ export const fetchJobs = (query, location, radius) => dispatch => {
   .catch(function (error) {
     console.log(error);
   })
-}
+};
+
+export const setSearchTerms = (query, location) => dispatch => {
+  dispatch({type: SET_SEARCH_TERMS, payload: {query: query, location: location}});
+};

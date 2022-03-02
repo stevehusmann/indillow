@@ -1,20 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { CssBaseline, Grid } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
+
 import Header from './components/Header/Header';
 import JobList from './components/JobList/JobList';
 import Map from './components/Map/Map';
-import { fetchJobs } from './actions/index.js';
+
 
 const App = () => {
-  let query = "";
-  let location = "Round Rock";
-  let radius = 0;
-  const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchJobs(query,location, radius));
-  }, [dispatch, query, location, radius]);
 
   return (
     <>
