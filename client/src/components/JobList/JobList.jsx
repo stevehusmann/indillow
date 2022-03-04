@@ -10,7 +10,7 @@ const JobList = (props) => {
   console.log(jobs);
   const classes = useStyles();
 
-if(Array.isArray(jobs)){
+if(jobs.length > 0){
   return (
     <div className={classes.container}>
       <FormControl className={classes.formControl}>
