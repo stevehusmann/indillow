@@ -3,19 +3,9 @@ const router = require("express").Router();
 const puppeteer = require('puppeteer');
 const {Client} = require("@googlemaps/google-maps-services-js");
 
-router.get("/jobs", async (req, res, next) => {
-  const query = req.query.q || ' ';
-  const location = req.query.l || ' ';
-  const radius = req.query.radius || 0;
-  const pageLink = req.query.pageLink;
-  let URL = null;
+router.post("/jobs", async (req, res, next) => {
+  const URL = req.body.URL;
   const jobsArray = [];
-  
-  if (pageLink) {
-    URL = pageLink;
-  } else {
-    URL = `http://www.indeed.com/jobs?q=${query}&l=${location}&radius=${radius}`;
-  }
   
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
@@ -90,9 +80,10 @@ router.get("/pages", async (req, res, next) => {
     const page = await browser.newPage();
     await page.goto(URL);
     URL = await page.evaluate(() => {
-      const href = document.querySelector('a[aria-label="Next"]')?.getAttribute('href');
-      const pp = document.querySelector('a[aria-label="Next"]')?.getAttribute('data-pp');
-      if (href && pp) {
+      const isNextButton = document.querySelector('a[aria-label="Next"]');
+      if(isNextButton) {
+        const href = document.querySelector('a[aria-label="Next"]').getAttribute('href');
+        const pp = document.querySelector('a[aria-label="Next"]').getAttribute('data-pp');
         return 'http://indeed.com' + href + '&pp=' + pp;
       } else {
         return null;

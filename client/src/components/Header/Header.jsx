@@ -13,19 +13,19 @@ const Header = () => {
   // let radius = 0;
   const ROOT_URL = "http://localhost:8000";
   let query = "Cook";
-  let location = "Round Rock";
+  let location = "Round%20Rock%2C%20TX";
   let radius = 0;
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-      dispatch(fetchJobs(query, location, radius, null));
+      dispatch(fetchJobs(`https://indeed.com/jobs?q=${query}&l=${location}&radius=${radius}`));
       axios.get(`${ROOT_URL}/pages?q=${query}&l=${location}&radius=${radius}`)
       .then(function (response) {
         const linkArray = response.data;
         if (linkArray) {
           linkArray.map(link => {
-            return dispatch(fetchJobs(null, null, null, link));
+            return dispatch(fetchJobs(link));
           });
         }
       });
