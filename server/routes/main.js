@@ -5,8 +5,8 @@ const {Client} = require("@googlemaps/google-maps-services-js");
 
 router.post("/jobs", async (req, res, next) => {
   const URL = req.body.URL;
+  const jobKeys = req.body.jobKeys;
   const jobsArray = [];
-  
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await page.goto(URL);
@@ -14,31 +14,33 @@ router.post("/jobs", async (req, res, next) => {
   const resultsArray = await page.evaluate(() => {
     return window.mosaic.providerData["mosaic-provider-jobcards"].metaData.mosaicProviderJobCardsModel.results;
   })
-
+  console.log('jobKeys: '+ jobKeys);
   // add data from initial JS object
   resultsArray.map(async (job) => {
-    if(job.loceTagValueList) {
-      let address = '';
-      let neighborhood = '';
-      if(job.loceTagValueList.length == 1 && job.company) {
-        address = `${job.loceTagValueList[0].slice(54,-2)}, ${job.jobLocationCity}, ${job.jobLocationState} ${job.jobLocationPostal}`;
-        neighborhood = null;
-      } else if (job.loceTagValueList.length == 2) {
-        address = `${job.loceTagValueList[1].slice(54,-2)}, ${job.jobLocationCity}, ${job.jobLocationState} ${job.jobLocationPostal}`;
-        neighborhood = job.loceTagValueList[0].slice(59,-2);
+    if(!jobKeys.includes(job.jobkey)){
+      if(job.loceTagValueList) {
+        let address = '';
+        let neighborhood = '';
+        if(job.loceTagValueList.length == 1 && job.company) {
+          address = `${job.loceTagValueList[0].slice(54,-2)}, ${job.jobLocationCity}, ${job.jobLocationState} ${job.jobLocationPostal}`;
+          neighborhood = null;
+        } else if (job.loceTagValueList.length == 2) {
+          address = `${job.loceTagValueList[1].slice(54,-2)}, ${job.jobLocationCity}, ${job.jobLocationState} ${job.jobLocationPostal}`;
+          neighborhood = job.loceTagValueList[0].slice(59,-2);
+        }
+        jobsArray.push({
+          key: job.jobkey,
+          jobTitle: job.title,
+          company: job.company,
+          link: 'https://indeed.com' + job.link,
+          urgentlyHiring: job.urgentlyHiring,
+          salary: job.salarySnippet.text,
+          address: address,
+          neighborhood: neighborhood,
+          jobTypes: job.jobTypes
+        });
       }
-
-      jobsArray.push({
-        key: job.jobkey,
-        jobTitle: job.title,
-        company: job.company,
-        link: 'https://indeed.com' + job.link,
-        urgentlyHiring: job.urgentlyHiring,
-        salary: job.salarySnippet.text,
-        address: address,
-        neighborhood: neighborhood,
-        jobTypes: job.jobTypes
-      });
+      jobKeys.push(job.jobkey);
     }
   });
 
@@ -60,46 +62,24 @@ router.post("/jobs", async (req, res, next) => {
 
   console.log("Successfully scraped: " + URL);
 
-  res.send(jobsArray);
+  const nextURL = await page.evaluate(() => {
+    const isNextButton = document.querySelector('a[aria-label="Next"]');
+    if(isNextButton) {
+      const href = document.querySelector('a[aria-label="Next"]').getAttribute('href');
+      const pp = document.querySelector('a[aria-label="Next"]').getAttribute('data-pp');
+      return 'http://indeed.com' + href + '&pp=' + pp;
+    } else {
+      return null;
+    }
+  });
+
+  res.send({
+    jobsArray: jobsArray,
+    nextURL: nextURL,
+    jobKeys: jobKeys
+  });
 
   await browser.close();
 });
-
-// get the links for remaining pages to be scraped
-router.get("/pages", async (req, res, next) => {  
-  const query = req.query.q || ' ';
-  const location = req.query.l || ' ';
-  const radius = req.query.radius || 0;
-  let URL = `http://www.indeed.com/jobs?q=${query}&l=${location}&radius=${radius}`;
-  
-  const linkArray = [];
-  const browser = await puppeteer.launch();
-
-  while (URL) {
-    console.log('checking ' + URL + ' for NEXT button.');
-    const page = await browser.newPage();
-    await page.goto(URL);
-    URL = await page.evaluate(() => {
-      const isNextButton = document.querySelector('a[aria-label="Next"]');
-      if(isNextButton) {
-        const href = document.querySelector('a[aria-label="Next"]').getAttribute('href');
-        const pp = document.querySelector('a[aria-label="Next"]').getAttribute('data-pp');
-        return 'http://indeed.com' + href + '&pp=' + pp;
-      } else {
-        return null;
-      }
-    });
-    if (URL) {
-      linkArray.push(URL);
-    }
-  }
-  res.send(linkArray);
-  await browser.close();
-
-  });
-
-  
-
-
 
 module.exports = router;

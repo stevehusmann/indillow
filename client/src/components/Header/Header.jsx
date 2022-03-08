@@ -9,26 +9,16 @@ import axios from 'axios';
 
 const Header = () => {
   // let query = useSelector((state) => state.searchTerms.query);
-  // let location = useSelector((state) => state.searchTerms.query);
+  // let location = useSelector((state) => state.searchTerms.location);
   // let radius = 0;
-  const ROOT_URL = "http://localhost:8000";
   let query = "Cook";
-  let location = "Round%20Rock%2C%20TX";
+  let location = "Round%20Rock";
   let radius = 0;
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-      dispatch(fetchJobs(`https://indeed.com/jobs?q=${query}&l=${location}&radius=${radius}`));
-      axios.get(`${ROOT_URL}/pages?q=${query}&l=${location}&radius=${radius}`)
-      .then(function (response) {
-        const linkArray = response.data;
-        if (linkArray) {
-          linkArray.map(link => {
-            return dispatch(fetchJobs(link));
-          });
-        }
-      });
+    dispatch(fetchJobs(`https://indeed.com/jobs?q=${query}&l=${location}&radius=${radius}`));
   }, [dispatch, query, location, radius]);
   
   // const handleSubmitClick 
