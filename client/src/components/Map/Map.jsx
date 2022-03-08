@@ -1,7 +1,7 @@
 import React from 'react';
 import GoogleMapReact from 'google-map-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { GeoAltFill } from 'react-bootstrap-icons';
+import { CircleFill, Circle } from 'react-bootstrap-icons';
 import { Paper, requirePropFactory, Typography, useMediaQuery} from '@material-ui/core';
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 import useStyles from './styles';
@@ -35,7 +35,7 @@ const Map = () => {
               lng={Number(job.location.lng)}
               key={job.key}
             >
-            <GeoAltFill color='royalblue' size={30}/>
+            <CircleFill color='royalblue' size={20} style ={{cursor: 'pointer'}}/>
             </div>
           ))}
         </GoogleMapReact>

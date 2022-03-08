@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
 // import { Autocomplete } from '@react-google-maps/api';
-import { AppBar, Toolbar, Typography, InputBase, Button } from '@material-ui/core';
+import { AppBar, Toolbar, InputBase, Button } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchJobs } from '../../actions';
+import { fetchJobs, setSearchTerms } from '../../actions';
 import useStyles from './styles';
-import axios from 'axios';
 
 const Header = () => {
-  // let query = useSelector((state) => state.searchTerms.query);
-  // let location = useSelector((state) => state.searchTerms.location);
-  // let radius = 0;
-  let query = "Cook";
-  let location = "Round%20Rock";
+  let query = useSelector((state) => state.searchTerms.query);
+  let location = useSelector((state) => state.searchTerms.location);
   let radius = 0;
+
+  const [tempQuery, setTempQuery] = useState('');
+  const [tempLocation, setTempLocation] = useState('');
 
   const dispatch = useDispatch();
 
@@ -21,7 +20,9 @@ const Header = () => {
     dispatch(fetchJobs(`https://indeed.com/jobs?q=${query}&l=${location}&radius=${radius}`));
   }, [dispatch, query, location, radius]);
   
-  // const handleSubmitClick 
+  const handleSubmitClick = () =>{
+    dispatch(setSearchTerms(tempQuery, tempLocation));
+  }
 
   const classes = useStyles();
   return (
@@ -33,17 +34,17 @@ const Header = () => {
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
-            <InputBase placeholder="Job title, keywords, or company" classes={{ root: classes.inputRoot, input: classes.inputInput }}/>
+            <InputBase placeholder="Job title, keywords, or company" classes={{ root: classes.inputRoot, input: classes.inputInput }} onChange={e => setTempQuery(e.target.value)}/>
           </div>
 
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
-            <InputBase placeholder="City, state, or zip code" classes={{ root: classes.inputRoot, input: classes.inputInput }}/>
+            <InputBase placeholder="City, state, or zip code" classes={{ root: classes.inputRoot, input: classes.inputInput }} onChange={e => setTempLocation(e.target.value)}/>
           </div>
 
-          <Button variant="contained" type="submit" >Search</Button>
+          <Button variant="contained" type="submit" onClick={handleSubmitClick}>Search</Button>
 
 
       </Toolbar>

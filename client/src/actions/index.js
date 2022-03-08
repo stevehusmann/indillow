@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FETCH_JOBS, SET_SEARCH_TERMS } from './types';
+import { FETCH_JOBS, SET_CURRENT_JOB_KEYS, SET_SEARCH_TERMS } from './types';
 const ROOT_URL = "http://localhost:8000";
 
 export const fetchJobs = (pageLink) => dispatch => {
@@ -12,6 +12,7 @@ export const fetchJobs = (pageLink) => dispatch => {
         scrapePage(response.data.nextURL, response.data.jobKeys);
       } else {
         console.log('Scraping complete.');
+        dispatch(setCurrentJobKeys(jobKeys));
       }
     })
     .catch(function (error) {
@@ -27,3 +28,6 @@ export const setSearchTerms = (query, location) => dispatch => {
   dispatch({type: SET_SEARCH_TERMS, payload: {query: query, location: location}});
 };
 
+export const setCurrentJobKeys = (currentJobKeys) => dispatch => {
+  dispatch({type: SET_CURRENT_JOB_KEYS, payload: currentJobKeys});
+};

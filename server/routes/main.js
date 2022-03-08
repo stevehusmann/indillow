@@ -14,7 +14,6 @@ router.post("/jobs", async (req, res, next) => {
   const resultsArray = await page.evaluate(() => {
     return window.mosaic.providerData["mosaic-provider-jobcards"].metaData.mosaicProviderJobCardsModel.results;
   })
-  console.log('jobKeys: '+ jobKeys);
   // add data from initial JS object
   resultsArray.map(async (job) => {
     if(!jobKeys.includes(job.jobkey)){
