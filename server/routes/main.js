@@ -12,7 +12,11 @@ router.post("/jobs", async (req, res, next) => {
   await page.goto(URL);
 
   const resultsArray = await page.evaluate(() => {
-    return window.mosaic.providerData["mosaic-provider-jobcards"].metaData.mosaicProviderJobCardsModel.results;
+    try {
+      return window.mosaic.providerData["mosaic-provider-jobcards"].metaData.mosaicProviderJobCardsModel.results;
+    } catch (error) {
+      console.log('Puppeteer JobCard Error: ' + error);
+    }
   })
   // add data from initial JS object
   resultsArray.map(async (job) => {
@@ -36,9 +40,12 @@ router.post("/jobs", async (req, res, next) => {
           salary: job.salarySnippet.text,
           address: address,
           neighborhood: neighborhood,
-          jobTypes: job.jobTypes
+          jobTypes: job.jobTypes,
+          logo: job.companyBrandingAttributes ? job.companyBrandingAttributes.logoUrl : null,
         });
       }
+      
+      
       jobKeys.push(job.jobkey);
     }
   });
@@ -62,14 +69,19 @@ router.post("/jobs", async (req, res, next) => {
   console.log("Successfully scraped: " + URL);
 
   const nextURL = await page.evaluate(() => {
-    const isNextButton = document.querySelector('a[aria-label="Next"]');
-    if(isNextButton) {
-      const href = document.querySelector('a[aria-label="Next"]').getAttribute('href');
-      const pp = document.querySelector('a[aria-label="Next"]').getAttribute('data-pp');
-      return 'http://indeed.com' + href + '&pp=' + pp;
-    } else {
-      return null;
+    try {
+      const isNextButton = document.querySelector('a[aria-label="Next"]');
+      if(isNextButton) {
+        const href = document.querySelector('a[aria-label="Next"]').getAttribute('href');
+        const pp = document.querySelector('a[aria-label="Next"]').getAttribute('data-pp');
+        return 'http://indeed.com' + href + '&pp=' + pp;
+      } else {
+        return null;
+      }    
+    } catch (error) {
+      console.log('Puppeteer Next Button Error: ' + error);
     }
+    
   });
 
   res.send({

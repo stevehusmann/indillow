@@ -41,7 +41,7 @@ const Header = () => {
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
-            <InputBase placeholder="City, state, or zip code" classes={{ root: classes.inputRoot, input: classes.inputInput }} onChange={e => setTempLocation(e.target.value)}/>
+            <InputBase placeholder="City or zip code" classes={{ root: classes.inputRoot, input: classes.inputInput }} onChange={e => setTempLocation(e.target.value)}/>
           </div>
 
           <Button variant="contained" type="submit" onClick={handleSubmitClick}>Search</Button>
