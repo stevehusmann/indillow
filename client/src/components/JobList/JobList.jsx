@@ -5,7 +5,8 @@ import JobDetails from '../JobDetails/JobDetails';
 import useStyles from './styles';
 
 const JobList = (props) => {
-
+  let query = useSelector((state) => state.searchTerms.query);
+  let location = useSelector((state) => state.searchTerms.location);
   let jobs = useSelector((state) => state.jobs);
   console.log(jobs);
   const classes = useStyles();
@@ -13,10 +14,10 @@ const JobList = (props) => {
 if(jobs.length > 0){
   return (
     <div className={classes.container}>
-      <FormControl className={classes.formControl}>
-
-      </FormControl>
-      <Grid container spacing={3} className={classes.list}>
+      {/* <FormControl className={classes.formControl}>
+      </FormControl> */}
+      <h3>We found {jobs.length} {query} jobs in {location}.</h3>
+      <Grid container spacing={2} className={classes.list}>
         {jobs?.map((job) => (
           <Grid item key={job.key} xs={12}>
             <JobDetails job={job} />

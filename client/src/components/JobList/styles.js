@@ -12,7 +12,7 @@ export default makeStyles((theme) => ({
     height: '600px', display: 'flex', justifyContent: 'center', alignItems: 'center',
   },
   container: {
-    padding: '25px',
+    padding: '25px', boxShadow:'0px 0px 5px lightgrey', borderRadius: '5px'
   },
   marginBottom: {
     marginBottom: '30px',
