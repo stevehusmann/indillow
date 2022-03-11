@@ -5,12 +5,12 @@ import styled from 'styled-components';
 const JobDetails = ({ job }) => {
   return (
       <JobCard>
-          <Card.Header as="h5">{job.jobTitle}</Card.Header>
+          <Card.Header as="h6">{job.jobTitle}</Card.Header>
         <Card.Body>
           <Container fluid>
             <Row>
               <Col xl='9'>
-                <Card.Text>{job.salary ? job.salary : <span />}</Card.Text>
+                {job.salary ? <Card.Text>{job.salary}</Card.Text> : null}
                 <Card.Text><strong>{job.company}</strong></Card.Text>
                 <Card.Text><small className="text-muted">{job.address}</small></Card.Text>
               </Col>
@@ -33,11 +33,7 @@ const JobCard = styled(Card)`
   cursor: pointer;
   border-radius: 5px;
   box-shadow:0px 0px 6px lightgrey;
-
   margin: auto;
-
-
-
   &:hover {
     background-color: #eeeeee;
   }

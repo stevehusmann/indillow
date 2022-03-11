@@ -17,7 +17,11 @@ const Header = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchJobs(`https://indeed.com/jobs?q=${query}&l=${location}&radius=${radius}`));
+    const controller = new AbortController();
+    dispatch(fetchJobs(`https://indeed.com/jobs?q=${query}&l=${location}&radius=${radius}`, controller));
+    return () => {
+      controller.abort();
+    };
   }, [dispatch, query, location, radius]);
   
   const handleSubmitClick = () =>{
@@ -27,7 +31,7 @@ const Header = () => {
   const classes = useStyles();
   return (
     <AppBar position="static">
-      <Toolbar className={classes.toolbar}>
+      <Toolbar className={classes.toolbar} >
         <img src="indillow-logo.png" alt="logo" className={classes.logo} />
 
           <div className={classes.search}>

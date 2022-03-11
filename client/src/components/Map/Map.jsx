@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import GoogleMapReact from 'google-map-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CircleFill } from 'react-bootstrap-icons';
 import styled from 'styled-components';
-import { Card, Spinner, Popover, OverlayTrigger} from 'react-bootstrap';
+import { Container, Row, Col, Spinner, Popover, OverlayTrigger, Overlay} from 'react-bootstrap';
 import { Paper, requirePropFactory, Typography, useMediaQuery} from '@material-ui/core';
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 import useStyles from './styles';
@@ -18,10 +18,6 @@ const Map = () => {
   const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
   let jobs = useSelector((state) => state.jobs);
 
-  const renderJobThumbnail = (job) => {
-    
-  }
-
   if (jobs.length > 0) {
     return (
       <div className={classes.mapContainer}>
@@ -31,9 +27,9 @@ const Map = () => {
           center={{lat: Number(jobs[0].location.lat), lng: Number(jobs[0].location.lng)}}
           defaultZoom={13}
           margin={[50,50,50,50]}
-          options={{minZoom:12, maxZoom:18}}
+          // options={{minZoom:11, maxZoom:18}}
           onChange={(e) => {
-            console.log(e);
+            // console.log(e);
           }}
           onChildClick={(child) => {}}
         >
@@ -48,17 +44,23 @@ const Map = () => {
                 placement="top"
                 overlay={
                   <JobThumbnail id="button-tooltip">
-                    <Popover.Body>
-                      <strong>{job.jobTitle}</strong><br />
-                      <small>{job.company}</small><br />
-                      {job.salary}
-                    </Popover.Body>
+                    <Container>
+                      <Row>
+                        {job.logo ? <Col xs={4}><LogoThumbnail src={job.logo} /></Col> : null}
+                        <Col>
+                        <strong>{job.jobTitle}</strong><br />
+                        <small>{job.company}</small><br />
+                        {job.salary ? <small><strong>{job.salary}</strong></small> : null}
+                        </Col>
+                      </Row>
+                    </Container>
                   </JobThumbnail>
                 }
               >
-                <JobMarker size={17}/>
-              </OverlayTrigger>
-            </div>
+                <JobMarker size={17} />
+          </OverlayTrigger>
+
+          </div>
           ))}
         </GoogleMapReact>
       </div>
@@ -95,5 +97,14 @@ const JobThumbnail = styled(Popover)`
 background-color: white;
 border-radius: 0px;
 box-shadow:0px 0px 6px grey;
+padding: 10px 5px;
+margin: auto;
+vertical-align: center
 
+`
+
+const LogoThumbnail = styled.img`
+width:100%;
+margin: auto;
+padding: 5px;
 `
