@@ -19,37 +19,38 @@ router.post("/jobs", async (req, res, next) => {
     }
   })
   // add data from initial JS object
-  resultsArray.map(async (job) => {
-    if(!jobKeys.includes(job.jobkey)){
-      if(job.loceTagValueList) {
-        let address = '';
-        let neighborhood = '';
-        if(job.loceTagValueList.length == 1 && job.company) {
-          address = `${job.loceTagValueList[0].slice(54,-2)}, ${job.jobLocationCity}, ${job.jobLocationState} ${job.jobLocationPostal}`;
-          neighborhood = null;
-        } else if (job.loceTagValueList.length == 2) {
-          address = `${job.loceTagValueList[1].slice(54,-2)}, ${job.jobLocationCity}, ${job.jobLocationState} ${job.jobLocationPostal}`;
-          neighborhood = job.loceTagValueList[0].slice(59,-2);
+  if (resultsArray) {
+    resultsArray.map(async (job) => {
+      if(!jobKeys.includes(job.jobkey)){
+        if(job.loceTagValueList) {
+          let address = '';
+          let neighborhood = '';
+          if(job.loceTagValueList.length == 1 && job.company) {
+            address = `${job.loceTagValueList[0].slice(54,-2)}, ${job.jobLocationCity}, ${job.jobLocationState} ${job.jobLocationPostal}`;
+            neighborhood = null;
+          } else if (job.loceTagValueList.length == 2) {
+            address = `${job.loceTagValueList[1].slice(54,-2)}, ${job.jobLocationCity}, ${job.jobLocationState} ${job.jobLocationPostal}`;
+            neighborhood = job.loceTagValueList[0].slice(59,-2);
+          }
+          jobsArray.push({
+            key: job.jobkey,
+            jobTitle: job.title,
+            company: job.company,
+            link: 'https://indeed.com' + job.link,
+            urgentlyHiring: job.urgentlyHiring,
+            salary: job.salarySnippet.text,
+            address: address,
+            neighborhood: neighborhood,
+            jobTypes: job.jobTypes,
+            logo: job.companyBrandingAttributes ? job.companyBrandingAttributes.logoUrl : null,
+          });
         }
-        jobsArray.push({
-          key: job.jobkey,
-          jobTitle: job.title,
-          company: job.company,
-          link: 'https://indeed.com' + job.link,
-          urgentlyHiring: job.urgentlyHiring,
-          salary: job.salarySnippet.text,
-          address: address,
-          neighborhood: neighborhood,
-          jobTypes: job.jobTypes,
-          logo: job.companyBrandingAttributes ? job.companyBrandingAttributes.logoUrl : null,
-        });
+        
+        
+        jobKeys.push(job.jobkey);
       }
-      
-      
-      jobKeys.push(job.jobkey);
-    }
-  });
-
+    });
+  }
   // add GeoLocation Data
   const addLocationData = await Promise.all(jobsArray.map(async (job) => {
     const args = {

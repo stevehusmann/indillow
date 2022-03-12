@@ -67,9 +67,14 @@ const Map = () => {
     );
   } else {
     return (
-      <LoadingSpinner animation="border" role="status" variant="primary">
-        <span className="visually-hidden">Loading...</span>
-      </LoadingSpinner>
+      <SpinnerContainer>
+        <Row>
+          <Spinner animation="border" role="status" variant="primary">
+          <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        </Row>
+      </SpinnerContainer>
+
     )
   }
 }
@@ -77,7 +82,7 @@ const Map = () => {
 export default Map;
 
 const JobMarker = styled(CircleFill)`
-color: royalblue; 
+color: #006aff; 
 cursor: pointer;
 border-color: white;
 border-radius: 50%;
@@ -88,11 +93,15 @@ box-shadow:0px 0px 4px grey;
   color: orangered;
 }
 `
-const LoadingSpinner = styled(Spinner)`
+
+const SpinnerContainer = styled(Container)`
+display: flex;
+background-color: white;
+height: 90vh;
 align-items: center;
 justify-content: center;
-display: flex;
 `
+
 const JobThumbnail = styled(Popover)`
 background-color: white;
 border-radius: 0px;
@@ -100,7 +109,6 @@ box-shadow:0px 0px 6px grey;
 padding: 10px 5px;
 margin: auto;
 vertical-align: center
-
 `
 
 const LogoThumbnail = styled.img`

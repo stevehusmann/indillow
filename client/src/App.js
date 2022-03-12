@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CssBaseline, Grid } from '@material-ui/core';
 
-import Header from './components/Header/Header';
+import Header from './components/Header';
 import JobList from './components/JobList/JobList';
 import Map from './components/Map/Map';
 
