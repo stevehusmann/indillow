@@ -5,7 +5,7 @@ const ROOT_URL = "http://localhost:8000";
 export const fetchJobs = (pageLink, abortController) => dispatch => {
 
   const scrapePage = (urlToScrape, jobKeys) => {
-    axios.post(`${ROOT_URL}/jobs`, {URL: urlToScrape, jobKeys: jobKeys, signal: abortController.signal})
+    axios.post(`${ROOT_URL}/jobs`, {URL: urlToScrape, jobKeys: jobKeys}, {signal: abortController.signal})
     .then(function (response) {
       dispatch({type: FETCH_JOBS, payload: response.data.jobsArray});
       if (response.data.nextURL) {

@@ -9,13 +9,11 @@ const JobDetails = ({ job }) => {
         <Card.Body>
           <Container fluid>
             <Row>
-              <Col xl='9'>
+              {job.logo ? <Col xl='3'sm='1'><Logo src={job.logo ? job.logo : null}/></Col> : null}
+              <Col>
                 {job.salary ? <Card.Text>{job.salary}</Card.Text> : null}
                 <Card.Text><strong>{job.company}</strong></Card.Text>
                 <Card.Text><small className="text-muted">{job.address}</small></Card.Text>
-              </Col>
-              <Col xl='3'sm='1'>
-                <Logo src={job.logo ? job.logo : null}/>
               </Col>
             </Row>
           </Container>
@@ -35,7 +33,8 @@ const JobCard = styled(Card)`
   box-shadow:0px 0px 6px lightgrey;
   margin: auto;
   &:hover {
-    background-color: #eeeeee;
+    box-shadow:0px 0px 6px darkblue;
+    background-color: #fdfdfd;
   }
 `
 const Logo = styled.img`
