@@ -26,10 +26,10 @@ router.post("/jobs", async (req, res, next) => {
           let address = '';
           let neighborhood = '';
           if(job.loceTagValueList.length == 1 && job.company) {
-            address = `${job.loceTagValueList[0].slice(54,-2)}, ${job.jobLocationCity}, ${job.jobLocationState} ${job.jobLocationPostal}`;
+            address = `${job.loceTagValueList[0].stringValue}, ${job.formattedLocation}`;
             neighborhood = null;
           } else if (job.loceTagValueList.length == 2) {
-            address = `${job.loceTagValueList[1].slice(54,-2)}, ${job.jobLocationCity}, ${job.jobLocationState} ${job.jobLocationPostal}`;
+            address = `${job.loceTagValueList[1].slice(54,-2)}, ${job.formattedLocation}`;
             neighborhood = job.loceTagValueList[0].slice(59,-2);
           }
           jobsArray.push({

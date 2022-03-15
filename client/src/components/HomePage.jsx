@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 // import { Autocomplete } from '@react-google-maps/api';
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchJobs, setSearchTerms } from '../actions';
 import { Form, Row, Col, Container, Button} from 'react-bootstrap';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 
-const Header = () => {
+const HomePage = () => {
+  let navigate = useNavigate();
   let query = useSelector((state) => state.searchTerms.query);
   let location = useSelector((state) => state.searchTerms.location);
   let radius = 0;
@@ -26,71 +27,78 @@ const Header = () => {
   
   const handleSubmitClick = (event) =>{
     event.preventDefault();
+    
     if (!(tempQuery == query && tempLocation == location)){
       dispatch(setSearchTerms(tempQuery, tempLocation));
     }
+    navigate(`/results`);
   }
 
   return (
-    <TopBar fluid >
-      <Row className="align-items-center">
+    <HomePageContainer fluid>
 
-        <Col >
-          <Form>
-            <Row>
-              <Col sm={2}>
-                <Link to='/'>
-                    <IndillowLogo src="indillow-logo.png" alt="logo"/>
-                </Link>    
-              </Col>
-              <Col sm={3}>
-                <SearchField 
-                type="text"
-                placeholder= {query ? query : "Job title, keywords, or company"}
-                onChange={e => setTempQuery(e.target.value)}
-                />
-              </Col>
-              <Col sm={3}>
-                <SearchField
-                type="text"
-                placeholder= {location ? location : "City or zip code"}
-                onChange={e => setTempLocation(e.target.value)}
-                />
-              </Col>
-              <Col sm={2}>
-                <FindJobsButton 
-                type="submit"
-                onClick={handleSubmitClick}
-                >
-                  Find jobs
-                </FindJobsButton>
-              </Col>
-            </Row>
-          </Form>
-        </Col>
-      </Row>
-    </TopBar>
+      <TopRow>
+        <IndillowLogo src="indillow-logo.png" alt="logo"/>
+      </TopRow>
 
+      <HomePageForm>
+        <SearchField
+        size="lg"
+        type="text"
+        placeholder= "Job title, keywords, or company"
+        onChange={e => setTempQuery(e.target.value)}
+        />
+
+        <SearchField
+        size="lg"
+        type="text"
+        placeholder= "City or zip code"
+        onChange={e => setTempLocation(e.target.value)}
+        />
+
+        <FindJobsButton 
+        type="submit"
+        onClick={handleSubmitClick}
+        >
+          Find jobs
+        </FindJobsButton>
+
+      </HomePageForm>
+    </HomePageContainer>
     );
 }
 
-const TopBar = styled(Container)`
-background-color: #efefef;
-// border: 2px solid lightgrey;
+const TopRow = styled(Row)`
+background-color: white;
 box-shadow:0px 0px 6px lightgrey;
 padding: 10px;
 `
+
+const HomePageContainer = styled(Container)`
+background-image: url("https://images.unsplash.com/photo-1520950237264-dfe336995c34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2847&q=80")
+
+
+`
+
+const HomePageForm = styled(Form)`
+margin: auto;
+width: 40%;
+
+`
+
 const IndillowLogo = styled.img`
-min-width: 100px;
-width: 100%;
-max-width: 160px;
+max-width: 200px;
+display: block;
+margin-left: auto;
+margin-right: auto;
+width: 40%;
 `
 
 const FindJobsButton = styled(Button)`
 font-weight: 800;
 background-color: #2557a7;
-margin: 5px;
-
+padding: 10px 30px;
+margin-top: 20px;
 &:hover {
   color: #2557a7;
   background-color: white;
@@ -103,12 +111,11 @@ margin: 5px;
 `
 
 const SearchField = styled(Form.Control)`
+margin: auto;
 &:focus {
   box-shadow:0px 0px 6px #2557a7;
 }
-margin: 5px;
+margin-top: 20px;
 `
 
-
-export default Header;
-
+export default HomePage;

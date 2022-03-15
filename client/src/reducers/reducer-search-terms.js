@@ -10,6 +10,7 @@ const DEFAULT_STATE = {
 export default function(state = DEFAULT_STATE, action) {
   switch(action.type) {
     case SET_SEARCH_TERMS: 
+
       return action.payload;
   
     default:
