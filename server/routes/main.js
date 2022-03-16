@@ -1,4 +1,4 @@
-require('dotenv').config();
+const dotenv = require('dotenv').config();
 const router = require("express").Router();
 const puppeteer = require('puppeteer');
 const {Client} = require("@googlemaps/google-maps-services-js");
@@ -23,49 +23,61 @@ router.post("/jobs", async (req, res, next) => {
     resultsArray.map(async (job) => {
       if(!jobKeys.includes(job.jobkey)){
         if(job.loceTagValueList) {
-          let address = '';
-          let neighborhood = '';
-          if(job.loceTagValueList.length == 1 && job.company) {
-            address = `${job.loceTagValueList[0].stringValue}, ${job.formattedLocation}`;
-            neighborhood = null;
-          } else if (job.loceTagValueList.length == 2) {
-            address = `${job.loceTagValueList[1].slice(54,-2)}, ${job.formattedLocation}`;
-            neighborhood = job.loceTagValueList[0].slice(59,-2);
-          }
-          jobsArray.push({
-            key: job.jobkey,
-            jobTitle: job.title,
-            company: job.company,
-            link: 'https://indeed.com' + job.link,
-            urgentlyHiring: job.urgentlyHiring,
-            salary: job.salarySnippet.text,
-            address: address,
-            neighborhood: neighborhood,
-            jobTypes: job.jobTypes,
-            logo: job.companyBrandingAttributes ? job.companyBrandingAttributes.logoUrl : null,
+          let address = null;
+          let neighborhood = null;
+          job.loceTagValueList.map(locString => {
+            const locationKey = locString.split('"')[1];
+            const locationValue = locString.split('"')[3];
+            console.log('key: ' + locationKey + ' value ' +locationValue);
+
+            if (locationKey === 'address') {
+              address = `${locationValue}, ${job.formattedLocation}`;
+              console.log(address);
+            } else if (locationKey === 'neighborhood') {
+              neighborhood = locationValue;
+              console.log('neighborhood: ' + neighborhood)
+            }
           });
+          if (address) {
+            jobsArray.push({
+              key: job.jobkey,
+              jobTitle: job.title,
+              company: job.company,
+              link: 'https://indeed.com' + job.link,
+              urgentlyHiring: job.urgentlyHiring,
+              salary: job.salarySnippet.text,
+              address: address,
+              neighborhood: neighborhood,
+              jobTypes: job.jobTypes,
+              logo: job.companyBrandingAttributes ? job.companyBrandingAttributes.logoUrl : null,
+            });
+          }
         }
-        
-        
         jobKeys.push(job.jobkey);
       }
     });
   }
   // add GeoLocation Data
-  const addLocationData = await Promise.all(jobsArray.map(async (job) => {
-    const args = {
-      params: {
-        key: process.env.GOOGLE_MAPS_API_KEY,
-        address: job.address,
-      }
-    };
-    const client = new Client();
-    const geocode = await client.geocode(args).then(gcResponse => {
-      return gcResponse.data.results[0];
-    });
-    job.location = geocode.geometry.location;
-    job.placeId = geocode.place_id;
-  }))
+  try {
+    const addLocationData = await Promise.all(jobsArray.map(async (job) => {
+      const args = {
+        params: {
+          key: process.env.GOOGLE_MAPS_API_KEY,
+          address: job.address,
+        }
+      };
+      const client = new Client();
+      const geocode = await client.geocode(args).then(gcResponse => {
+        return gcResponse.data.results[0];
+      });
+      job.location = geocode.geometry.location;
+      job.placeId = geocode.place_id;
+    }))
+  } catch (error){
+    console.log("Geocode error: " + error)
+  }
+
+
 
   console.log("Successfully scraped: " + URL);
 

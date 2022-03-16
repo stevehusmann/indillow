@@ -77,13 +77,16 @@ padding: 10px;
 const HomePageContainer = styled(Container)`
 background-image: url("https://images.unsplash.com/photo-1520950237264-dfe336995c34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2847&q=80")
 
-
 `
 
 const HomePageForm = styled(Form)`
 margin: auto;
-width: 40%;
-
+width: 50%;
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+text-align: center;
 `
 
 const IndillowLogo = styled.img`
@@ -116,6 +119,7 @@ margin: auto;
   box-shadow:0px 0px 6px #2557a7;
 }
 margin-top: 20px;
+
 `
 
 export default HomePage;
