@@ -26,7 +26,7 @@ const Header = () => {
   
   const handleSubmitClick = (event) =>{
     event.preventDefault();
-    if (!(tempQuery == query && tempLocation == location)){
+    if (!(tempQuery == query && tempLocation == location) && !(tempQuery && tempLocation === '')){
       dispatch(setSearchTerms(tempQuery, tempLocation));
     }
   }

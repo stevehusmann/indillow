@@ -75,11 +75,14 @@ padding: 10px;
 `
 
 const HomePageContainer = styled(Container)`
-background-image: url("https://images.unsplash.com/photo-1520950237264-dfe336995c34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2847&q=80")
-
+background-image: url("https://images.unsplash.com/photo-1520950237264-dfe336995c34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2847&q=80");
+background-size: cover;
+background-position: top;
+height: 80vh;
 `
 
 const HomePageForm = styled(Form)`
+
 margin: auto;
 width: 50%;
 position: absolute;

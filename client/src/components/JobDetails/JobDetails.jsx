@@ -27,11 +27,13 @@ export default JobDetails;
 
 const JobCard = styled(Card)`
   background-color: white;
+  display: block;
   line-height: normal;
   cursor: pointer;
   border-radius: 5px;
   box-shadow:0px 0px 6px lightgrey;
   margin: auto;
+  padding: 5px;       
   &:hover {
     box-shadow:0px 0px 6px #2557a7;
     background-color: #fdfdfd;
