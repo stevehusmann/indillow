@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 // import { Autocomplete } from '@react-google-maps/api';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchJobs, setSearchTerms } from '../actions';
-import { Form, Row, Col, Container, Button} from 'react-bootstrap';
+import { Form, Row, Col, Container, Button, ProgressBar} from 'react-bootstrap';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
@@ -10,6 +10,8 @@ const Header = () => {
   let query = useSelector((state) => state.searchTerms.query);
   let location = useSelector((state) => state.searchTerms.location);
   let radius = 0;
+
+  let progress = useSelector((state) => state.progress);
 
   const [tempQuery, setTempQuery] = useState('');
   const [tempLocation, setTempLocation] = useState('');
@@ -26,7 +28,7 @@ const Header = () => {
   
   const handleSubmitClick = (event) =>{
     event.preventDefault();
-    if (!(tempQuery == query && tempLocation == location) && !(tempQuery && tempLocation === '')){
+    if (!(tempQuery === query && tempLocation === location) && !(tempQuery && tempLocation === '')){
       dispatch(setSearchTerms(tempQuery, tempLocation));
     }
   }
@@ -69,10 +71,15 @@ const Header = () => {
           </Form>
         </Col>
       </Row>
+      <ScrapeProgressBar animated now={progress}/>
     </TopBar>
 
     );
 }
+
+const ScrapeProgressBar = styled(ProgressBar)`
+
+`
 
 const TopBar = styled(Container)`
 background-color: #efefef;

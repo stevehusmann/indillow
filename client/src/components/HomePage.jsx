@@ -40,8 +40,9 @@ const HomePage = () => {
       <TopRow>
         <IndillowLogo src="indillow-logo.png" alt="logo"/>
       </TopRow>
-
       <HomePageForm>
+      <h3>Find work where you live.</h3>
+
         <SearchField
         size="lg"
         type="text"
@@ -76,20 +77,19 @@ padding: 10px;
 
 const HomePageContainer = styled(Container)`
 background-image: url("https://images.unsplash.com/photo-1520950237264-dfe336995c34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2847&q=80");
+background-color: white;
 background-size: cover;
-background-position: top;
 height: 50vh;
 `
 
 const HomePageForm = styled(Form)`
-
-margin: auto;
+position: relative;
+top: 20%;
 width: 50%;
-position: absolute;
-top: 30%;
-left: 50%;
-transform: translate(-50%, -50%);
+margin: auto;
 text-align: center;
+justify-content: center;
+align-items: center;
 `
 
 const IndillowLogo = styled.img`
