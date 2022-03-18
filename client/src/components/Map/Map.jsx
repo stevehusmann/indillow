@@ -1,14 +1,14 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import GoogleMapReact from 'google-map-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CircleFill } from 'react-bootstrap-icons';
 import styled from 'styled-components';
 import { Container, Row, Col, Spinner, Popover, OverlayTrigger, Overlay} from 'react-bootstrap';
+import { setCurrentPopup } from '../../actions';
 import { Paper, requirePropFactory, Typography, useMediaQuery} from '@material-ui/core';
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 import useStyles from './styles';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import JobDetails from '../JobDetails/JobDetails';
 
 
 
@@ -17,6 +17,8 @@ const Map = () => {
   const isMobile = useMediaQuery('(min-width: 600px');
   const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
   let jobs = useSelector((state) => state.jobs);
+  let currentPopup = useSelector((state) => state.currentPopup);
+  const dispatch = useDispatch();
 
   if (jobs.length > 0) {
     return (
@@ -41,6 +43,7 @@ const Map = () => {
               key={job.key}
             >
               <OverlayTrigger
+                show={(currentPopup === job.key)}
                 placement="top"
                 overlay={
                   <JobThumbnail id="button-tooltip">
@@ -57,7 +60,10 @@ const Map = () => {
                   </JobThumbnail>
                 }
               >
-                <JobMarker size={17} />
+                <JobMarker 
+                onMouseEnter={() => dispatch(setCurrentPopup(job.key))}
+                onMouseLeave={() => dispatch(setCurrentPopup(null))}
+                size={17} />
           </OverlayTrigger>
 
           </div>

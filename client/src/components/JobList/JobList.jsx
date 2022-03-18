@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Spinner, Container, Row } from 'react-bootstrap';
-import { CircularProgress, Grid, Typography, InputLabel, MenuItem, FormControl, Select } from '@material-ui/core';
+import { setCurrentPopup } from '../../actions';
+import { Grid } from '@material-ui/core';
 import JobDetails from '../JobDetails/JobDetails';
 import useStyles from './styles';
 import styled from 'styled-components';
+
 
 
 const JobList = (props) => {
@@ -12,6 +14,7 @@ const JobList = (props) => {
   let location = useSelector((state) => state.searchTerms.location);
   let jobs = useSelector((state) => state.jobs);
   const classes = useStyles();
+  const dispatch = useDispatch();
 
 if(jobs.length > 0){
   return (
@@ -23,7 +26,10 @@ if(jobs.length > 0){
         
         {jobs?.map((job) => (
           <Grid item key={job.key} xs={12}>
-            <JobDetails job={job} />
+            <JobDetails 
+            job={job} 
+
+            />
           </Grid>
         ))}
       </Grid>

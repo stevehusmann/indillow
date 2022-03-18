@@ -1,6 +1,5 @@
 /* eslint-disable import/no-anonymous-default-export */
-import { FETCH_JOBS, SET_SEARCH_TERMS } from '../actions/types';
-const _= require('lodash');
+import { FETCH_JOBS, SET_SEARCH_TERMS, SET_SHOW_POPUP } from '../actions/types';
 
 const DEFAULT_STATE = []
 

@@ -1,11 +1,17 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { Card, Container, Row, Col} from 'react-bootstrap';
+import { setCurrentPopup } from '../../actions';
 import styled from 'styled-components';
 
 const JobDetails = ({ job }) => {
-  return (
-      <JobCard>
+  const dispatch = useDispatch();
 
+  return (
+      <JobCard
+      onMouseEnter={() => dispatch(setCurrentPopup(job.key))}
+      onMouseLeave={() => dispatch(setCurrentPopup(null))}
+      >
         <Card.Body>
           <Container fluid>
             <Row>
