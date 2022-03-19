@@ -95,21 +95,23 @@ border-radius: 50%;
 border-width: 2px;
 border-style: solid;
 box-shadow:0px 0px 4px grey;
-&:hover {
-  color: orangered;
-}
+
 `
 
 const JobTrigger = styled.div`
 cursor: pointer;
-
+&:hover {
+  ${JobMarker} {
+    color: orangered;
+  }
+}
 `
 
 const Label = styled.h6`
 font-size: 12px;
-font-weight: bolder;
-// z-index: 1;
-transform: translate(32%,177%);
+font-weight: bold;
+z-index: 1;
+transform: translate(32%,172%);
 color: white;
 `
 

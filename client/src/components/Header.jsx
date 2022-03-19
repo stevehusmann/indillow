@@ -70,7 +70,7 @@ const Header = () => {
           </Form>
         </Col>
       </Row>
-      <ScrapeProgressBar animated now={progress}/>
+      {(progress<99) ? <ScrapeProgressBar animated now={progress}/> : null}
     </TopBar>
 
     );

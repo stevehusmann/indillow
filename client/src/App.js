@@ -45,7 +45,7 @@ const App = () => {
                   <span className="visually-hidden">Loading...</span>
                   </Spinner>
 
-                  <h3>Searching on indeed.com for {query} jobs in {location}...</h3>
+                  <h3>Searching indeed.com for {query} jobs in {location}...</h3>
 
                 </SpinnerContainer>
 
