@@ -40,6 +40,6 @@ export const setCurrentJobKeys = (currentJobKeys) => dispatch => {
   dispatch({type: SET_CURRENT_JOB_KEYS, payload: currentJobKeys});
 };
 
-export const setCurrentPopup = (jobIndex) => dispatch => {
-  dispatch ({type: SET_CURRENT_POPUP, payload: jobIndex});
+export const setCurrentPopup = (placeId) => dispatch => {
+  dispatch ({type: SET_CURRENT_POPUP, payload: placeId});
 }

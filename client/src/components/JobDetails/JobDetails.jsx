@@ -9,7 +9,7 @@ const JobDetails = ({ job }) => {
 
   return (
       <JobCard
-      onMouseEnter={() => dispatch(setCurrentPopup(job.key))}
+      onMouseEnter={() => dispatch(setCurrentPopup(job.placeId))}
       onMouseLeave={() => dispatch(setCurrentPopup(null))}
       >
         <Card.Body>

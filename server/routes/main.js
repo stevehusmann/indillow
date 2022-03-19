@@ -28,7 +28,6 @@ router.post("/jobs", async (req, res, next) => {
           job.loceTagValueList.map(locString => {
             const locationKey = locString.split('"')[1];
             const locationValue = locString.split('"')[3];
-            console.log('key: ' + locationKey + ' value ' +locationValue);
 
             if (locationKey === 'address') {
               address = `${locationValue}, ${job.formattedLocation}`;
@@ -54,6 +53,7 @@ router.post("/jobs", async (req, res, next) => {
           }
         }
         jobKeys.push(job.jobkey);
+        console.log('everything but GeoLocation');
       }
     });
   }
@@ -76,8 +76,6 @@ router.post("/jobs", async (req, res, next) => {
   } catch (error){
     console.log("Geocode error: " + error)
   }
-
-
 
   console.log("Successfully scraped: " + URL);
 

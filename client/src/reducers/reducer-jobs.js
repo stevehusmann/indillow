@@ -1,16 +1,39 @@
 /* eslint-disable import/no-anonymous-default-export */
-import { FETCH_JOBS, SET_SEARCH_TERMS, SET_SHOW_POPUP } from '../actions/types';
+import { FETCH_JOBS, SET_SEARCH_TERMS } from '../actions/types';
 
-const DEFAULT_STATE = []
+const DEFAULT_STATE = {
+  byKey: [],
+  byPlaceId: {}
+}
 
 export default function(state = DEFAULT_STATE, action) {
   switch(action.type) {
     case FETCH_JOBS: {
-      return state.concat(action.payload)
-    }
+      
+      const currentState = Object.assign({}, state);
+      console.log(currentState);
+      action.payload.map( job => {
+        if (currentState.byPlaceId[job.placeId]) {
+          currentState.byPlaceId[job.placeId][currentState.byPlaceId[job.placeId].length] = job;
+          currentState.byKey.push(job);
+        } else {
+          currentState.byPlaceId[job.placeId] = [job];
+          currentState.byKey.push(job);
+        }
+        return null;
+      })
+    
+      return {...state, 
+        currentState
+      }
 
+  }
+  
     case SET_SEARCH_TERMS:
-      return DEFAULT_STATE;
+      return {...state, 
+        byKey: [],
+        byPlaceId: {}      
+      }
     
     default:
       return state;

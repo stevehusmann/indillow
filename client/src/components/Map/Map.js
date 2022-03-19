@@ -13,20 +13,19 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 const Map = () => {
+
+
   const classes = useStyles();
-  const isMobile = useMediaQuery('(min-width: 600px');
   const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
   let jobs = useSelector((state) => state.jobs);
   let currentPopup = useSelector((state) => state.currentPopup);
   const dispatch = useDispatch();
-
-  if (jobs.length > 0) {
-    return (
-      <div className={classes.mapContainer}>
+  return (
+    <div className={classes.mapContainer}>
         <GoogleMapReact
           bootstrapURLKeys={{ key: API_KEY}}
-          defaultCenter={{lat: Number(jobs[0].location.lat), lng: Number(jobs[0].location.lng)}}
-          center={{lat: Number(jobs[0].location.lat), lng: Number(jobs[0].location.lng)}}
+          defaultCenter={{lat: Number(jobs.byKey[0].location.lat), lng: Number(jobs.byKey[0].location.lng)}}
+          center={{lat: Number(jobs.byKey[0].location.lat), lng: Number(jobs.byKey[0].location.lng)}}
           defaultZoom={13}
           margin={[50,50,50,50]}
           // options={{minZoom:11, maxZoom:18}}
@@ -35,35 +34,47 @@ const Map = () => {
           }}
           onChildClick={(child) => {}}
         >
-          {jobs?.map((job) => (
+          {Object.keys(jobs.byPlaceId).map(jobArrayKey => (
             <div
               className={classes.markerContainer}
-              lat={Number(job.location.lat)}
-              lng={Number(job.location.lng)}
-              key={job.key}
+              lat={Number(jobs.byPlaceId[jobArrayKey][0].location.lat)}
+              lng={Number(jobs.byPlaceId[jobArrayKey][0].location.lng)}
+              key={jobArrayKey}
             >
               <OverlayTrigger
-                show={(currentPopup === job.key)}
+                show={(currentPopup === jobArrayKey)}
                 placement="top"
                 overlay={
                   <JobThumbnail id="button-tooltip">
                     <Container>
-                      <Row>
-                        {job.logo ? <Col xs={4}><LogoThumbnail src={job.logo} /></Col> : null}
-                        <Col>
-                        <strong>{job.jobTitle}</strong><br />
-                        <small>{job.company}</small><br />
-                        {job.salary ? <small><strong>{job.salary}</strong></small> : null}
-                        </Col>
-                      </Row>
+                        {
+                          jobs.byPlaceId[jobArrayKey].map((job,i) => {
+                          return(
+                            <>
+                              <Row>
+                                {job.logo ? <Col xs={4}><LogoThumbnail src={job.logo} /></Col> : null}
+                                <Col>
+                                <small>{job.company}</small><br />
+                                <strong>{job.jobTitle}</strong><br />
+                                {job.salary ? <small><strong>{job.salary}</strong></small> : null }
+                                </Col>                            
+                              </Row>
+                              {(i + 1 === jobs.byPlaceId[jobArrayKey].length) ? <br /> : <hr />}
+                            </>
+                            );
+                          })
+                        }
                     </Container>
                   </JobThumbnail>
                 }
               >
-                <JobMarker 
-                onMouseEnter={() => dispatch(setCurrentPopup(job.key))}
+                <JobTrigger
+                onMouseEnter={() => dispatch(setCurrentPopup(jobArrayKey))}
                 onMouseLeave={() => dispatch(setCurrentPopup(null))}
-                size={17} />
+                >
+                <Label>{(jobs.byPlaceId[jobArrayKey].length > 1) ? jobs.byPlaceId[jobArrayKey].length : null}</Label>
+                <JobMarker size={18}/>
+                </JobTrigger>
           </OverlayTrigger>
 
           </div>
@@ -71,19 +82,8 @@ const Map = () => {
         </GoogleMapReact>
       </div>
     );
-  } else {
-    return (
-      <SpinnerContainer>
-        <Row>
-          <Spinner animation="border" role="status" variant="primary">
-          <span className="visually-hidden">Loading...</span>
-          </Spinner>
-        </Row>
-      </SpinnerContainer>
-
-    )
   }
-}
+
 
 export default Map;
 
@@ -100,12 +100,17 @@ box-shadow:0px 0px 4px grey;
 }
 `
 
-const SpinnerContainer = styled(Container)`
-display: flex;
-background-color: white;
-height: 90vh;
-align-items: center;
-justify-content: center;
+const JobTrigger = styled.div`
+cursor: pointer;
+
+`
+
+const Label = styled.h6`
+font-size: 12px;
+font-weight: bolder;
+// z-index: 1;
+transform: translate(32%,177%);
+color: white;
 `
 
 const JobThumbnail = styled(Popover)`

@@ -18,11 +18,13 @@ const HomePage = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-      const controller = new AbortController();
-      dispatch(fetchJobs(`https://indeed.com/jobs?q=${query}&l=${location}&radius=${radius}`, controller));
-      return () => {
-        controller.abort();
-      };
+      if (query || location) {
+        const controller = new AbortController();
+        dispatch(fetchJobs(`https://indeed.com/jobs?q=${query}&l=${location}&radius=${radius}`, controller));
+        return () => {
+          controller.abort();
+        }
+      }
   }, [dispatch, query, location, radius]);
   
   const handleSubmitClick = (event) =>{

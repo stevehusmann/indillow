@@ -10,11 +10,10 @@ const Header = () => {
   let query = useSelector((state) => state.searchTerms.query);
   let location = useSelector((state) => state.searchTerms.location);
   let radius = 0;
-
   let progress = useSelector((state) => state.progress);
 
-  const [tempQuery, setTempQuery] = useState('');
-  const [tempLocation, setTempLocation] = useState('');
+  const [tempQuery, setTempQuery] = useState(query);
+  const [tempLocation, setTempLocation] = useState(location);
 
   const dispatch = useDispatch();
 
@@ -48,14 +47,14 @@ const Header = () => {
               <Col sm={3}>
                 <SearchField 
                 type="text"
-                placeholder= {query ? query : "Job title, keywords, or company"}
+                placeholder= "Job title, keywords, or company"
                 onChange={e => setTempQuery(e.target.value)}
                 />
               </Col>
               <Col sm={3}>
                 <SearchField
                 type="text"
-                placeholder= {location ? location : "City or zip code"}
+                placeholder= "City or zip code"
                 onChange={e => setTempLocation(e.target.value)}
                 />
               </Col>
@@ -77,7 +76,9 @@ const Header = () => {
     );
 }
 
-const ScrapeProgressBar = styled(ProgressBar)`
+const ScrapeProgressBar = styled(ProgressBar).attrs(props => ({
+  
+}))`
 
 `
 
