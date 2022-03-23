@@ -1,6 +1,9 @@
 const dotenv = require('dotenv').config();
 const router = require("express").Router();
 const puppeteer = require('puppeteer');
+const cheerio = require('cheerio');
+const axios = require('axios');
+
 const {Client} = require("@googlemaps/google-maps-services-js");
 
 router.post("/jobs", async (req, res, next) => {
@@ -31,10 +34,10 @@ router.post("/jobs", async (req, res, next) => {
 
             if (locationKey === 'address') {
               address = `${locationValue}, ${job.formattedLocation}`;
-              console.log(address);
+              // console.log(address);
             } else if (locationKey === 'neighborhood') {
               neighborhood = locationValue;
-              console.log('neighborhood: ' + neighborhood)
+              // console.log('neighborhood: ' + neighborhood)
             }
           });
           if (address) {
@@ -48,12 +51,14 @@ router.post("/jobs", async (req, res, next) => {
               address: address,
               neighborhood: neighborhood,
               jobTypes: job.jobTypes,
-              logo: job.companyBrandingAttributes ? job.companyBrandingAttributes.logoUrl : null,
+              logo: job.companyBrandingAttributes ? job.companyBrandingAttributes.logoUrl : null,              
+              headerImageUrl: job.companyBrandingAttributes ? job.companyBrandingAttributes.headerImageUrl : null,
+              formattedRelativeTime: job.formattedRelativeTime,
+
             });
           }
         }
         jobKeys.push(job.jobkey);
-        console.log('everything but GeoLocation');
       }
     });
   }
@@ -102,6 +107,28 @@ router.post("/jobs", async (req, res, next) => {
   });
 
   await browser.close();
+});
+
+async function fetchHTML(url) {
+  try {
+    const { data } = await axios.get(url);
+    return cheerio.load(data);
+  }
+  catch (error) {
+    console.log('cheerio: ' + error);
+  }
+}
+
+router.post("/jobdetails", async (req, res, next) => {
+  const URL = 'https://' + req.body.URL;
+  const $ = await fetchHTML(URL);
+  const jobDescription = $("#jobDescriptionText").html();
+  // const applyLink = $("#applyButtonLinkContainer > a").attribs.href;
+
+  res.send({
+    jobDescription: jobDescription
+    // applyLink: applyLink
+  });
 });
 
 module.exports = router;

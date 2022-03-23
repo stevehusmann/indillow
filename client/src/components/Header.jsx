@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-// import { Autocomplete } from '@react-google-maps/api';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchJobs, setSearchTerms } from '../actions';
 import { Form, Row, Col, Container, Button, ProgressBar} from 'react-bootstrap';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-const Header = () => {
+const Header = ({onPlaceChanged, onLoad}) => {
   let query = useSelector((state) => state.searchTerms.query);
   let location = useSelector((state) => state.searchTerms.location);
   let radius = 0;

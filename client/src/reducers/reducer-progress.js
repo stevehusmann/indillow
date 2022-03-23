@@ -9,7 +9,7 @@ export default function(state = DEFAULT_STATE, action) {
       return 0;
     
     case SET_PROGRESS: 
-      if (action.payload === 0 || 100){
+      if (action.payload === 100){
         return action.payload;
       } else {
         return state + action.payload;

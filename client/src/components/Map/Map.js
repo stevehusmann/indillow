@@ -1,19 +1,14 @@
-import React, {useState, useRef} from 'react';
+import React from 'react';
 import GoogleMapReact from 'google-map-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CircleFill } from 'react-bootstrap-icons';
 import styled from 'styled-components';
-import { Container, Row, Col, Spinner, Popover, OverlayTrigger, Overlay} from 'react-bootstrap';
+import { Container, Row, Col, Popover, OverlayTrigger} from 'react-bootstrap';
 import { setCurrentPopup } from '../../actions';
-import { Paper, requirePropFactory, Typography, useMediaQuery} from '@material-ui/core';
-import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 import useStyles from './styles';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
-
 const Map = () => {
-
 
   const classes = useStyles();
   const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
@@ -59,7 +54,7 @@ const Map = () => {
                                 {job.salary ? <small><strong>{job.salary}</strong></small> : null }
                                 </Col>                            
                               </Row>
-                              {(i + 1 === jobs.byPlaceId[jobArrayKey].length) ? <br /> : <hr />}
+                              {(i + 1 === jobs.byPlaceId[jobArrayKey].length) ? null : <hr />}
                             </>
                             );
                           })
