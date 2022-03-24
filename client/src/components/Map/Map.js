@@ -47,14 +47,17 @@ const Map = () => {
                           return(
                             <>
                               <Row>
-                                {job.logo ? <Col xs={4}><LogoThumbnail src={job.logo} /></Col> : null}
+                                {job.logo ? <LogoCol xs={4}><LogoThumbnail src={job.logo} /></LogoCol> : null}
                                 <Col>
-                                <small>{job.company}</small><br />
+                                {job.company}<br />
                                 <strong>{job.jobTitle}</strong><br />
-                                {job.salary ? <small><strong>{job.salary}</strong></small> : null }
+                                {job.salary ? <small>{job.salary}<br /></small> : null }
                                 </Col>                            
                               </Row>
-                              {(i + 1 === jobs.byPlaceId[jobArrayKey].length) ? null : <hr />}
+                              <Row>
+                                <RelTime>{job.formattedRelativeTime}</RelTime>
+                              </Row>
+                              {(i + 1 === jobs.byPlaceId[jobArrayKey].length) ? null : <Line />}
                             </>
                             );
                           })
@@ -119,8 +122,23 @@ margin: auto;
 vertical-align: center
 `
 
+const LogoCol = styled(Col)`
+display: flex;
+align-items: center;
+`
+
 const LogoThumbnail = styled.img`
 width:100%;
 margin: auto;
 padding: 5px;
+`
+
+const Line = styled.hr`
+margin-top: 10px;
+margin-bottom: 10px;
+`
+
+const RelTime = styled.small`
+display:block;
+text-align: right;
 `
