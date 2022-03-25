@@ -43,7 +43,7 @@ const HomePage = () => {
         <IndillowLogo src="indillow-logo.png" alt="logo"/>
       </TopRow>
       <HomePageForm>
-      <h3>Find work where you live.</h3>
+      <h2>Find work where you live.</h2>
 
         <SearchField
         size="lg"
@@ -107,6 +107,7 @@ font-weight: 800;
 background-color: #2557a7;
 padding: 10px 30px;
 margin-top: 20px;
+box-shadow:none;
 &:hover {
   color: #2557a7;
   background-color: white;

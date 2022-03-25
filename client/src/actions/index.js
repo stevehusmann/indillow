@@ -1,11 +1,12 @@
 import axios from "axios";
 import { FETCH_JOBS, SET_CURRENT_JOB_KEYS, SET_SEARCH_TERMS, SET_CURRENT_POPUP, SET_PROGRESS } from './types';
-const ROOT_URL = "http://localhost:8000";
+const ROOT_URL = process.env.REACT_APP_API_HOST;
 
 export const fetchJobs = (pageLink, abortController) => dispatch => {
 
   const scrapePage = (urlToScrape, jobKeys) => {
     let scrapingStart= false;
+    //CHANGE FOR DEPLOYMENT
     axios.post(`${ROOT_URL}/jobs`, {URL: urlToScrape, jobKeys: jobKeys}, {signal: abortController.signal})
     .then(function (response) {
       dispatch({type: SET_PROGRESS, payload: 10});

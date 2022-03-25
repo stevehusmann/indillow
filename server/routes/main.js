@@ -34,10 +34,8 @@ router.post("/jobs", async (req, res, next) => {
 
             if (locationKey === 'address') {
               address = `${locationValue}, ${job.formattedLocation}`;
-              // console.log(address);
             } else if (locationKey === 'neighborhood') {
               neighborhood = locationValue;
-              // console.log('neighborhood: ' + neighborhood)
             }
           });
           if (address) {
