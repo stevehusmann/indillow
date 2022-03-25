@@ -1,6 +1,5 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-
 const app = express();
 
 app.use(bodyParser.json());
@@ -21,9 +20,8 @@ app.use((req, res, next) => {
 });
 
 const mainRoutes = require("./routes/main");
+app.use("./routes/main", mainRoutes);
 
-app.use(mainRoutes);
+const PORT = process.env.PORT || 8000;
+app.listen(PORT, () => console.log(`Server is running in port ${PORT}`));
 
-app.listen(8000, () => {
-  console.log("Node.js listening on port " + 8000);
-});

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-// import { Autocomplete } from '@react-google-maps/api';
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchJobs, setSearchTerms } from '../actions';
-import { Form, Row, Col, Container, Button} from 'react-bootstrap';
+import { Form, Row, Container, Button} from 'react-bootstrap';
 import styled from 'styled-components';
 
 const HomePage = () => {
@@ -30,7 +29,7 @@ const HomePage = () => {
   const handleSubmitClick = (event) =>{
     event.preventDefault();
     
-    if (!(tempQuery == query && tempLocation == location)){
+    if (!(tempQuery === query && tempLocation === location)){
       dispatch(setSearchTerms(tempQuery, tempLocation));
     }
     navigate(`/results`);
