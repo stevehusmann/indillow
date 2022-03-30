@@ -11,9 +11,10 @@ export default function(state = DEFAULT_STATE, action) {
     case SET_PROGRESS: 
       if (action.payload === 100){
         return action.payload;
-      } else {
+      } else if (state + action.payload < 100) {
         return state + action.payload;
       }
+      
   
     default:
       return state;

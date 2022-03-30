@@ -6,7 +6,6 @@ export const fetchJobs = (pageLink, abortController) => dispatch => {
 
   const scrapePage = (urlToScrape, jobKeys) => {
     let scrapingStart= false;
-    //CHANGE FOR DEPLOYMENT
     axios.post(`${ROOT_URL}/jobs`, {URL: urlToScrape, jobKeys: jobKeys}, {signal: abortController.signal})
     .then(function (response) {
       dispatch({type: SET_PROGRESS, payload: 10});
@@ -28,7 +27,7 @@ export const fetchJobs = (pageLink, abortController) => dispatch => {
   scrapePage(pageLink, jobKeys);
 };
 
-export const setProgress =(increment) => dispatch => {
+export const setProgress = (increment) => dispatch => {
   dispatch({type: SET_PROGRESS, payload: {increment}});
 };
 
