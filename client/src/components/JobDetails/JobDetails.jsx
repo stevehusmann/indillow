@@ -1,57 +1,19 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Card, Container, Row, Col, Modal} from 'react-bootstrap';
-import { setCurrentPopup } from '../../actions';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Card, Container, Row, Col} from 'react-bootstrap';
+import { setCurrentPopup, setCurrentModal} from '../../actions';
 import styled from 'styled-components';
-// import axios from 'axios';
-// const ROOT_URL = "http://localhost:8000";
+import JobDetailModal from '../JobDetailModal';
 
 const JobDetails = ({ job }) => {
   const dispatch = useDispatch();
-  // const [showModal, setShowModal] = useState('false');
-  // // const fetchJobDetails = (URL) => {
-  // //   axios.post(`${ROOT_URL}/jobdetails`, {URL: URL})
-  // //   .then(function (response) {
-  // //     return response.data;
-  // //   })
-  // //   .catch(function (error) {
-  // //     console.log(error);
-  // //   })
-  // // }
-
-  // async function JobDetailsModal (job) {
-  //   // const jobDetails = await fetchJobDetails(job.link);
-  //   // console.log(jobDetails);
-  //   // const jobDetailsHTML = jobDetails.jobDetailsHTML;
-  //   // const applyLink = jobDetails.applyLink;
-  //   // console.log(applyLink);
-  //   return (
-  //     <Modal
-  //     centered
-  //     >
-  //         <Container fluid>
-  //           <Row>
-  //             {job.logo ? <Col xl='3'sm='1'><Logo src={job.logo ? job.logo : null}/></Col> : null}
-  //             <Col>
-  //               <h5>{job.jobTitle}</h5>
-  //               <h6>{job.company}</h6>
-  //               <h6><small className="text-muted">{job.address}</small></h6>
-  //               {job.salary ? <h6><strong>{job.salary}</strong></h6> : null}
-
-  //             </Col>
-  //           </Row>
-  //         </Container>
-  //     </Modal>
-  //   )
-  // }
-
-
+  let currentModal = useSelector((state) => state.currentModal);
   return (
       <>
       <JobCard
       onMouseEnter={() => dispatch(setCurrentPopup(job.placeId))}
       onMouseLeave={() => dispatch(setCurrentPopup(null))}
-      // onClick={()=> setShowModal(true)}
+      onClick={()=> dispatch(setCurrentModal(job.key))}
       >
         <Card.Body>
           <Container fluid>
@@ -68,11 +30,11 @@ const JobDetails = ({ job }) => {
           </Container>
         </Card.Body>
       </JobCard>
-      {/* <JobDetailsModal 
+      <JobDetailModal 
       job={job}
-      show={showModal}
-      onHide={() => setShowModal(false)}
-      /> */}
+      show={job.key === currentModal}
+      onHide={()=> dispatch(setCurrentModal(null))}
+      />
       </>
   );
 }

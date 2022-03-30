@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FETCH_JOBS, SET_CURRENT_JOB_KEYS, SET_SEARCH_TERMS, SET_CURRENT_POPUP, SET_PROGRESS } from './types';
+import { FETCH_JOBS, SET_CURRENT_JOB_KEYS, SET_SEARCH_TERMS, SET_CURRENT_POPUP, SET_PROGRESS, SET_CURRENT_MODAL } from './types';
 const ROOT_URL = process.env.REACT_APP_API_HOST;
 
 export const fetchJobs = (pageLink, abortController) => dispatch => {
@@ -29,7 +29,6 @@ export const fetchJobs = (pageLink, abortController) => dispatch => {
 };
 
 export const setProgress =(increment) => dispatch => {
-  console.log(increment);
   dispatch({type: SET_PROGRESS, payload: {increment}});
 };
 
@@ -43,4 +42,8 @@ export const setCurrentJobKeys = (currentJobKeys) => dispatch => {
 
 export const setCurrentPopup = (placeId) => dispatch => {
   dispatch ({type: SET_CURRENT_POPUP, payload: placeId});
+}
+
+export const setCurrentModal = (jobKey) => dispatch => {
+  dispatch({type: SET_CURRENT_MODAL, payload: jobKey})
 }

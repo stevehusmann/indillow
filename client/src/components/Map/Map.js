@@ -4,9 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CircleFill } from 'react-bootstrap-icons';
 import styled from 'styled-components';
 import { Container, Row, Col, Popover, OverlayTrigger} from 'react-bootstrap';
-import { setCurrentPopup } from '../../actions';
+import { setCurrentPopup, setCurrentModal} from '../../actions';
 import useStyles from './styles';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import JobDetailListModal from '../JobDetailListModal';
 
 const Map = () => {
 
@@ -15,6 +16,22 @@ const Map = () => {
   let jobs = useSelector((state) => state.jobs);
   let currentPopup = useSelector((state) => state.currentPopup);
   const dispatch = useDispatch();
+  const [showJobDetailListModal, setShowJobDetailListModal] = React.useState(false);
+  const [jobDetailList, setJobDetailList] = React.useState([]);
+  
+  const jobClickHandler = (placeId) => {
+
+    if (jobs.byPlaceId[placeId].length === 1){
+      dispatch(setCurrentModal(jobs.byPlaceId[placeId][0].key))
+    }
+    else if (jobs.byPlaceId[placeId].length > 1){
+      dispatch(setCurrentModal(null));
+      setJobDetailList(jobs.byPlaceId[placeId]);
+      setShowJobDetailListModal(true);
+    }
+
+  }
+  
   return (
     <div className={classes.mapContainer}>
         <GoogleMapReact
@@ -29,21 +46,28 @@ const Map = () => {
           }}
           onChildClick={(child) => {}}
         >
-          {Object.keys(jobs.byPlaceId).map(jobArrayKey => (
+          {Object.keys(jobs.byPlaceId).map(placeId => (
             <div
               className={classes.markerContainer}
-              lat={Number(jobs.byPlaceId[jobArrayKey][0].location.lat)}
-              lng={Number(jobs.byPlaceId[jobArrayKey][0].location.lng)}
-              key={jobArrayKey}
+              lat={Number(jobs.byPlaceId[placeId][0].location.lat)}
+              lng={Number(jobs.byPlaceId[placeId][0].location.lng)}
+              key={placeId}
+              onClick={()=> jobClickHandler(placeId)}
             >
+            <JobDetailListModal 
+              jobArray = {jobDetailList}
+              show = {showJobDetailListModal}
+              onHide={()=> setShowJobDetailListModal(false)}
+            />
+
               <OverlayTrigger
-                show={(currentPopup === jobArrayKey)}
+                show={(currentPopup === placeId)}
                 placement="top"
                 overlay={
                   <JobThumbnail id="button-tooltip">
                     <Container>
                         {
-                          jobs.byPlaceId[jobArrayKey].map((job,i) => {
+                          jobs.byPlaceId[placeId].map((job,i) => {
                           return(
                             <>
                               <Row>
@@ -57,7 +81,7 @@ const Map = () => {
                               <Row>
                                 <RelTime>{job.formattedRelativeTime}</RelTime>
                               </Row>
-                              {(i + 1 === jobs.byPlaceId[jobArrayKey].length) ? null : <Line />}
+                              {(i + 1 === jobs.byPlaceId[placeId].length) ? null : <Line />}
                             </>
                             );
                           })
@@ -67,10 +91,10 @@ const Map = () => {
                 }
               >
                 <JobTrigger
-                onMouseEnter={() => dispatch(setCurrentPopup(jobArrayKey))}
+                onMouseEnter={() => dispatch(setCurrentPopup(placeId))}
                 onMouseLeave={() => dispatch(setCurrentPopup(null))}
                 >
-                <Label>{(jobs.byPlaceId[jobArrayKey].length > 1) ? jobs.byPlaceId[jobArrayKey].length : null}</Label>
+                <Label>{(jobs.byPlaceId[placeId].length > 1) ? jobs.byPlaceId[placeId].length : null}</Label>
                 <JobMarker size={18}/>
                 </JobTrigger>
           </OverlayTrigger>
