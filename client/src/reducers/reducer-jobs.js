@@ -1,5 +1,5 @@
 /* eslint-disable import/no-anonymous-default-export */
-import { FETCH_JOBS, SET_SEARCH_TERMS } from '../actions/types';
+import { FETCH_JOBS, SET_SEARCH_TERMS, ADD_JOB_DESCRIPTION } from '../actions/types';
 
 const DEFAULT_STATE = {
   byKey: [],
@@ -26,7 +26,6 @@ export default function(state = DEFAULT_STATE, action) {
       return {...state, 
         currentState
       }
-
   }
   
     case SET_SEARCH_TERMS:
@@ -35,6 +34,13 @@ export default function(state = DEFAULT_STATE, action) {
         byPlaceId: {}      
       }
     
+    case ADD_JOB_DESCRIPTION:
+      const jobIndex = state.byKey.findIndex(job => job.key === action.payload.jobKey);
+      state.byKey[jobIndex].jobDescription =  action.payload.jobDescription;
+      return {
+        ...state      
+      };
+      
     default:
       return state;
     }

@@ -13,7 +13,7 @@ const JobDetails = ({ job }) => {
       <JobCard
       onMouseEnter={() => dispatch(setCurrentPopup(job.placeId))}
       onMouseLeave={() => dispatch(setCurrentPopup(null))}
-      onClick={()=> dispatch(setCurrentModal(job.key))}
+      onClick={()=> dispatch(setCurrentModal(job.key, job.link))}
       >
         <Card.Body>
           <Container fluid>
@@ -33,6 +33,7 @@ const JobDetails = ({ job }) => {
       <JobDetailModal 
       job={job}
       show={job.key === currentModal}
+      animation={false}
       onHide={()=> dispatch(setCurrentModal(null))}
       />
       </>

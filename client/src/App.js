@@ -41,14 +41,11 @@ const App = () => {
                <>
                <SpinnerContainer>
 
-                  <Spinner animation="border" role="status" variant="primary">
-                  <span className="visually-hidden">Loading...</span>
-                  </Spinner>
-                  <br />
-
+                  <LoadSpinner animation="border" variant="primary" /> <br />
                   <h3>Searching indeed.com for {query} jobs in {location}...</h3>
 
-                </SpinnerContainer>
+              </SpinnerContainer>
+
 
               </>
               } 
@@ -65,9 +62,14 @@ const App = () => {
 export default App;
 
 const SpinnerContainer = styled(Container)`
-display: fixed;
+display: flex;
 background-color: white;
 height: 90vh;
 align-items: center;
 justify-content: center;
+`
+
+const LoadSpinner = styled(Spinner)`
+margin-bottom: 10px;
+margin-right: 10px;
 `

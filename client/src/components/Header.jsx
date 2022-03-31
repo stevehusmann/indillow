@@ -31,6 +31,8 @@ const Header = ({onPlaceChanged, onLoad}) => {
     }
   }
 
+  const clearQueries = () => dispatch(setSearchTerms(null, null));
+
   return (
     <TopBar fluid >
       <Row className="align-items-center">
@@ -40,7 +42,7 @@ const Header = ({onPlaceChanged, onLoad}) => {
             <Row>
               <Col sm={2}>
                 <Link to='/'>
-                    <IndillowLogo src="indillow-logo.png" alt="logo"/>
+                    <IndillowLogo src="indillow-logo.png" alt="logo" onClick={clearQueries}/>
                 </Link>    
               </Col>
               <Col sm={3}>

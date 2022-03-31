@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FETCH_JOBS, SET_CURRENT_JOB_KEYS, SET_SEARCH_TERMS, SET_CURRENT_POPUP, SET_PROGRESS, SET_CURRENT_MODAL } from './types';
+import { FETCH_JOBS, SET_CURRENT_JOB_KEYS, SET_SEARCH_TERMS, SET_CURRENT_POPUP, SET_PROGRESS, SET_CURRENT_MODAL, ADD_JOB_DESCRIPTION } from './types';
 const ROOT_URL = process.env.REACT_APP_API_HOST;
 
 export const fetchJobs = (pageLink, abortController) => dispatch => {
@@ -43,6 +43,16 @@ export const setCurrentPopup = (placeId) => dispatch => {
   dispatch ({type: SET_CURRENT_POPUP, payload: placeId});
 }
 
-export const setCurrentModal = (jobKey) => dispatch => {
-  dispatch({type: SET_CURRENT_MODAL, payload: jobKey})
+export const setCurrentModal = (jobKey, link) => dispatch => {
+  dispatch({type: SET_CURRENT_MODAL, payload: jobKey});
+  console.log("fetching job details from " + link);
+  if (link){
+    axios.post(`${ROOT_URL}/jobdetails`, {URL: link})
+    .then(function (response) {
+      dispatch({type: ADD_JOB_DESCRIPTION, payload: {jobKey: jobKey, jobDescription: response.data.jobDescription}});
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
+  }
 }

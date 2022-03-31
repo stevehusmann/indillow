@@ -14,8 +14,10 @@ export default function(state = DEFAULT_STATE, action) {
       } else if (state + action.payload < 100) {
         return state + action.payload;
       }
+      else {
+        return state;
+      }
       
-  
     default:
       return state;
     }

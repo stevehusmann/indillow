@@ -3,7 +3,7 @@ import GoogleMapReact from 'google-map-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CircleFill } from 'react-bootstrap-icons';
 import styled from 'styled-components';
-import { Container, Row, Col, Popover, OverlayTrigger} from 'react-bootstrap';
+import { Container, Row, Col, Popover, OverlayTrigger, Modal} from 'react-bootstrap';
 import { setCurrentPopup, setCurrentModal} from '../../actions';
 import useStyles from './styles';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -16,22 +16,20 @@ const Map = () => {
   let jobs = useSelector((state) => state.jobs);
   let currentPopup = useSelector((state) => state.currentPopup);
   const dispatch = useDispatch();
-  const [showJobDetailListModal, setShowJobDetailListModal] = React.useState(false);
+  const [currentPlaceId, setCurrentPlaceId] = React.useState('');
   const [jobDetailList, setJobDetailList] = React.useState([]);
-  
+
   const jobClickHandler = (placeId) => {
 
-    if (jobs.byPlaceId[placeId].length === 1){
-      dispatch(setCurrentModal(jobs.byPlaceId[placeId][0].key))
-    }
-    else if (jobs.byPlaceId[placeId].length > 1){
-      dispatch(setCurrentModal(null));
+    if (jobs.byPlaceId[placeId].length > 1){
       setJobDetailList(jobs.byPlaceId[placeId]);
-      setShowJobDetailListModal(true);
+      setCurrentPlaceId(placeId);
     }
-
+    else {
+      dispatch(setCurrentModal(jobs.byPlaceId[placeId][0].key, jobs.byPlaceId[placeId][0].link))
+    }
   }
-  
+
   return (
     <div className={classes.mapContainer}>
         <GoogleMapReact
@@ -40,10 +38,6 @@ const Map = () => {
           center={{lat: Number(jobs.byKey[0].location.lat), lng: Number(jobs.byKey[0].location.lng)}}
           defaultZoom={13}
           margin={[50,50,50,50]}
-          // options={{minZoom:11, maxZoom:18}}
-          onChange={(e) => {
-            // console.log(e);
-          }}
           onChildClick={(child) => {}}
         >
           {Object.keys(jobs.byPlaceId).map(placeId => (
@@ -54,12 +48,6 @@ const Map = () => {
               key={placeId}
               onClick={()=> jobClickHandler(placeId)}
             >
-            <JobDetailListModal 
-              jobArray = {jobDetailList}
-              show = {showJobDetailListModal}
-              onHide={()=> setShowJobDetailListModal(false)}
-            />
-
               <OverlayTrigger
                 show={(currentPopup === placeId)}
                 placement="top"
@@ -88,6 +76,7 @@ const Map = () => {
                         }
                     </Container>
                   </JobThumbnail>
+                  
                 }
               >
                 <JobTrigger
@@ -98,8 +87,16 @@ const Map = () => {
                 <JobMarker size={18}/>
                 </JobTrigger>
           </OverlayTrigger>
-
+          <div onClick={e => e.stopPropagation()}>
+            <JobDetailListModal 
+                jobArray = {jobDetailList}
+                show = {placeId === currentPlaceId}
+                animation = {false}
+                onHide={() => setCurrentPlaceId(null)}
+                onClick={() => setCurrentPlaceId(null)}
+              />
           </div>
+    </div>
           ))}
         </GoogleMapReact>
       </div>
