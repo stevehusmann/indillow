@@ -16,6 +16,7 @@ const Header = ({onPlaceChanged, onLoad}) => {
 
   const dispatch = useDispatch();
 
+  
   useEffect(() => {
       const controller = new AbortController();
       dispatch(fetchJobs(`https://indeed.com/jobs?q=${query}&l=${location}&radius=${radius}`, controller));
