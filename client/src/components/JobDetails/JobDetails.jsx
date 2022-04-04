@@ -22,8 +22,8 @@ const JobDetails = ({ job }) => {
               <Col>
                 <h5>{job.jobTitle}</h5>
                 <h6>{job.company}</h6>
-                <h6><small className="text-muted">{job.address}</small></h6>
                 {job.salary ? <h6><strong>{job.salary}</strong></h6> : null}
+                <h6><small className="text-muted">{job.address}</small></h6>
                 <RelTime>{job.formattedRelativeTime}</RelTime>
               </Col>
             </Row>
