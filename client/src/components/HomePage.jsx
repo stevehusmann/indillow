@@ -42,7 +42,8 @@ const HomePage = () => {
         <IndillowLogo src="indillow-logo.png" alt="logo"/>
       </TopRow>
       <HomePageForm>
-      <h2>Find work where you live.</h2>
+        <br /><br />
+      <Text>Find work where you live.</Text> <br />
 
         <SearchField
         size="lg"
@@ -54,7 +55,7 @@ const HomePage = () => {
         <SearchField
         size="lg"
         type="text"
-        placeholder= "City or zip code"
+        placeholder= "City"
         onChange={e => setTempLocation(e.target.value)}
         />
 
@@ -76,11 +77,17 @@ box-shadow:0px 0px 6px lightgrey;
 padding: 10px;
 `
 
+const Text = styled.h2`
+color: white;
+text-shadow:0px 0px 4px #2557a7;
+`
+
 const HomePageContainer = styled(Container)`
-background-image: url("https://images.unsplash.com/photo-1520950237264-dfe336995c34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2847&q=80");
+background-image: url("https://images.unsplash.com/photo-1587147585300-924c2f951169?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80");
+background-position: center;
 background-color: white;
 background-size: cover;
-height: 50vh;
+height: 60vh;
 `
 
 const HomePageForm = styled(Form)`

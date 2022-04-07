@@ -42,8 +42,8 @@ return (
           </Col>
         </Row>
         <br />
-        {props.job.applyLink ? 
-        <ApplyButton onClick={() => window.open(props.job.applyLink)}> Apply Now </ApplyButton> 
+        {props.job.link ? 
+        <ApplyButton onClick={() => window.open(props.job.link)}> Apply Now on indeed.com </ApplyButton> 
         : <ApplyButton disabled>
             <Spinner
             as="span"
