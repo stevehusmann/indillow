@@ -35,7 +35,7 @@ const Map = () => {
         <GoogleMapReact
           bootstrapURLKeys={{ key: API_KEY}}
           defaultCenter={{lat: Number(jobs.byKey[0].location.lat), lng: Number(jobs.byKey[0].location.lng)}}
-          center={{lat: Number(jobs.byKey[0].location.lat), lng: Number(jobs.byKey[0].location.lng)}}
+          center={{lat: Number(jobs.byKey[0]?.location.lat), lng: Number(jobs.byKey[0]?.location.lng)}}
           defaultZoom={13}
           margin={[50,50,50,50]}
           onChildClick={(child) => {}}
@@ -43,8 +43,8 @@ const Map = () => {
           {Object.keys(jobs.byPlaceId).map(placeId => (
             <div
               className={classes.markerContainer}
-              lat={Number(jobs.byPlaceId[placeId][0].location.lat)}
-              lng={Number(jobs.byPlaceId[placeId][0].location.lng)}
+              lat={jobs.byPlaceId[placeId][0].location.lat ? Number(jobs.byPlaceId[placeId][0].location.lat) : null} 
+              lng={jobs.byPlaceId[placeId][0].location.lng ? Number(jobs.byPlaceId[placeId][0].location.lng) : null}
               key={placeId}
               onClick={()=> jobClickHandler(placeId)}
             >
@@ -96,8 +96,10 @@ const Map = () => {
                 onClick={() => setCurrentPlaceId(null)}
               />
           </div>
-    </div>
-          ))}
+        </div>
+          )
+          
+          )}
         </GoogleMapReact>
       </div>
     );
