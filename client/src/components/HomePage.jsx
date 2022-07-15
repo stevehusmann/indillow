@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchJobs, setSearchTerms } from '../actions';
-import { Form, Row, Container, Button} from 'react-bootstrap';
+import { Form, Row, Col, Container, Button} from 'react-bootstrap';
 import styled from 'styled-components';
+
 
 const HomePage = () => {
   let navigate = useNavigate();
@@ -39,7 +40,20 @@ const HomePage = () => {
     <HomePageContainer fluid>
 
       <TopRow>
-        <IndillowLogo src="indillow-logo.png" alt="logo"/>
+        <Col />
+        <Col>
+          <IndillowLogo src="indillow-logo.png" alt="logo"/>
+        </Col>
+        <SignInCol>
+          <Row>
+            <Col>
+              <SignInLink>Sign In</SignInLink>
+            </Col>
+            <Col>
+              <SignUpLink>Sign Up</SignUpLink>
+            </Col>
+          </Row>
+        </SignInCol>
       </TopRow>
       <HomePageForm>
         <br /><br />
@@ -123,6 +137,21 @@ box-shadow:none;
   color: white;
   box-shadow:0px 0px 6px #2557a7;
 }
+`
+const SignInCol = styled(Col)`
+  padding-top: 20px;
+  display: block;
+`
+
+const SignUpLink = styled.h6 `
+color: #6c757d;
+&:hover {
+  color: #2557a7;
+  cursor: pointer;
+}
+`
+const SignInLink = styled(SignUpLink) `
+text-align: right;
 `
 
 const SearchField = styled(Form.Control)`

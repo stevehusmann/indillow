@@ -13,13 +13,18 @@ export default function(state = DEFAULT_STATE, action) {
       const currentState = Object.assign({}, state);
       console.log(currentState);
       action.payload.map( job => {
-        if (currentState.byPlaceId[job.placeId]) {
-          currentState.byPlaceId[job.placeId][currentState.byPlaceId[job.placeId].length] = job;
-          currentState.byKey.push(job);
+        if (job.placeId) {
+          if (currentState.byPlaceId[job.placeId]) {
+            currentState.byPlaceId[job.placeId][currentState.byPlaceId[job.placeId].length] = job;
+            currentState.byKey.push(job);
+          } else {
+            currentState.byPlaceId[job.placeId] = [job];
+            currentState.byKey.push(job);
+          }
         } else {
-          currentState.byPlaceId[job.placeId] = [job];
           currentState.byKey.push(job);
         }
+
         return null;
       })
     
