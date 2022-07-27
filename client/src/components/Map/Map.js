@@ -34,8 +34,8 @@ const Map = () => {
     <div className={classes.mapContainer}>
         <GoogleMapReact
           bootstrapURLKeys={{ key: API_KEY}}
-          defaultCenter={{lat: Number(jobs.byKey[0].location.lat), lng: Number(jobs.byKey[0].location.lng)}}
-          center={{lat: Number(jobs.byKey[0]?.location.lat), lng: Number(jobs.byKey[0]?.location.lng)}}
+          defaultCenter={{lat: Number(jobs.byPlaceId[0][0].location.lat), lng: Number(jobs.byPlaceId[0][0].location.lng)}}
+          center={{lat: Number(jobs.byPlaceId[0][0]?.location.lat), lng: Number(jobs.byPlaceId[0][0]?.location.lng)}}
           defaultZoom={13}
           margin={[50,50,50,50]}
           onChildClick={(child) => {}}
